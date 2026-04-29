@@ -1,16 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
-import watchHero from "@/assets/watch-hero.jpg";
+import watchHero from "@/assets/watch-hero.png";
 import { Countdown } from "@/components/Countdown";
 import { LiveClock } from "@/components/LiveClock";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AURUM — The Heritage Chronograph | Launching June 15" },
+      { title: "Havrut — The Heritage Chronograph | Launching June 15" },
       {
         name: "description",
         content:
-          "Introducing AURUM Heritage Chronograph. A masterpiece of horology, launching June 15. Reserve yours and witness time redefined.",
+          "Introducing the Havrut Heritage Chronograph. A masterpiece of horology, launching June 15. Reserve yours and witness time redefined.",
       },
     ],
   }),
@@ -28,9 +28,9 @@ function Index() {
       <header className="relative z-10 flex items-center justify-between px-6 sm:px-12 py-6">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-gradient-gold shadow-gold flex items-center justify-center">
-            <span className="font-display text-background font-bold text-lg">A</span>
+            <span className="font-display text-background font-bold text-lg">H</span>
           </div>
-          <span className="font-display text-xl tracking-widest">AURUM</span>
+          <span className="font-display text-xl tracking-widest">HAVRUT</span>
         </div>
         <nav className="hidden md:flex items-center gap-10 text-sm uppercase tracking-[0.2em] text-muted-foreground">
           <a href="#collection" className="hover:text-gold transition">Collection</a>
@@ -56,7 +56,7 @@ function Index() {
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-md leading-relaxed">
-              The AURUM Heritage Chronograph — Swiss-engineered, hand-finished,
+              The Havrut Heritage Chronograph — Swiss-engineered, hand-finished,
               and limited to 500 pieces worldwide. Witness the unveiling.
             </p>
 
@@ -87,7 +87,7 @@ function Index() {
             <div className="absolute inset-0 bg-gradient-emerald rounded-full blur-3xl opacity-40 animate-glow-pulse" />
             <img
               src={watchHero}
-              alt="AURUM Heritage Chronograph wristwatch with emerald dial and rose gold accents"
+              alt="Havrut Heritage Chronograph wristwatch with emerald dial and rose gold accents"
               width={1024}
               height={1024}
               className="relative w-full h-auto animate-float drop-shadow-2xl"
@@ -142,7 +142,7 @@ function Index() {
       </main>
 
       <footer className="relative z-10 border-t border-gold/10 py-8 text-center text-xs uppercase tracking-[0.25em] text-muted-foreground">
-        © 2026 AURUM Maison · Geneva, Switzerland
+        © 2026 Havrut Maison · Geneva, Switzerland
       </footer>
     </div>
   );
