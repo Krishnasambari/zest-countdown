@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import watchHero from "@/assets/watch-hero.jpg";
+import watchHero from "@/assets/watch-hero.png";
 import { Countdown } from "@/components/Countdown";
 import { LiveClock } from "@/components/LiveClock";
 
