@@ -14,7 +14,6 @@ export function AnalogWatch() {
   const [now, setNow] = useState(() => new Date());
   const [chronoMs, setChronoMs] = useState(0);
   const [running, setRunning] = useState(false);
-  const startRef = useRef<number | null>(null);
   const baseRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
@@ -32,16 +31,17 @@ export function AnalogWatch() {
   // Chronograph loop
   useEffect(() => {
     if (!running) return;
+    const startedAt = performance.now();
+    const startBase = baseRef.current;
     const tick = () => {
-      const elapsed = baseRef.current + (performance.now() - (startRef.current ?? 0));
+      const elapsed = startBase + (performance.now() - startedAt);
       setChronoMs(elapsed);
       rafRef.current = requestAnimationFrame(tick);
     };
-    startRef.current = performance.now();
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      baseRef.current = baseRef.current + (performance.now() - (startRef.current ?? 0));
+      baseRef.current = startBase + (performance.now() - startedAt);
     };
   }, [running]);
 
@@ -135,10 +135,11 @@ export function AnalogWatch() {
 
         {/* Numerals */}
         {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n, i) => {
-          if ([3, 6, 9].includes(n)) return null; // sub-dials live here
           const a = (i * 30 * Math.PI) / 180;
-          const x = 200 + Math.sin(a) * 130;
-          const y = 200 - Math.cos(a) * 130 + 6;
+          const isEdge = [3, 6, 9].includes(n);
+          const radius = isEdge ? 156 : 130;
+          const x = 200 + Math.sin(a) * radius;
+          const y = 200 - Math.cos(a) * radius + (isEdge ? 4 : 6);
           return (
             <text
               key={n}
@@ -147,7 +148,7 @@ export function AnalogWatch() {
               textAnchor="middle"
               fill="#e7c684"
               fontFamily="Georgia, serif"
-              fontSize="18"
+              fontSize={isEdge ? "13" : "18"}
               fontStyle="italic"
             >
               {n}
