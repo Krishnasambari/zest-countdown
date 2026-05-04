@@ -89,12 +89,13 @@ function Index() {
             </div>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <a
-                href="#reserve"
+              <button
+                type="button"
+                onClick={() => setReserveOpen(true)}
                 className="inline-flex items-center justify-center rounded-full bg-gradient-gold px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.02] transition-transform"
               >
                 Reserve Yours
-              </a>
+              </button>
               <a
                 href="#craft"
                 className="inline-flex items-center justify-center rounded-full border border-gold/40 px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-foreground hover:border-gold hover:bg-gold/5 transition"
