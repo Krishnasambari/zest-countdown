@@ -226,10 +226,27 @@ export function AnalogWatch() {
         {/* Center cap */}
         <circle cx="200" cy="200" r="6" fill="#1a1a1a" stroke="#e7c684" strokeWidth="1.5" />
 
-        {/* Crown + pushers */}
-        <rect x="392" y="180" width="10" height="8" fill="#c89a55" />
-        <rect x="395" y="155" width="6" height="10" fill="#c89a55" />
-        <rect x="395" y="235" width="6" height="10" fill="#c89a55" />
+        {/* Crown (aligned to 3 o'clock) */}
+        <g>
+          {/* stem */}
+          <rect x="378" y="196" width="8" height="8" fill="#8a6326" />
+          {/* crown body */}
+          <circle cx="394" cy="200" r="11" fill="url(#caseGrad)" stroke="#6b4a23" strokeWidth="0.8" />
+          {/* fluted teeth */}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const a = (i * 30 * Math.PI) / 180;
+            const x1 = 394 + Math.cos(a) * 10;
+            const y1 = 200 + Math.sin(a) * 10;
+            const x2 = 394 + Math.cos(a) * 13;
+            const y2 = 200 + Math.sin(a) * 13;
+            return (
+              <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#8a6326" strokeWidth="1.6" strokeLinecap="round" />
+            );
+          })}
+          {/* inset cap with H */}
+          <circle cx="394" cy="200" r="5" fill="#3a2810" stroke="#e7c684" strokeWidth="0.6" />
+          <text x="394" y="203" textAnchor="middle" fill="#e7c684" fontFamily="Georgia, serif" fontSize="6" fontWeight="bold">H</text>
+        </g>
       </svg>
 
       {/* Chrono controls */}
