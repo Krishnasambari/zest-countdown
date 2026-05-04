@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import watchHero from "@/assets/watch-hero.png";
 import { Countdown } from "@/components/Countdown";
 import { LiveClock } from "@/components/LiveClock";
+import { AnalogWatch } from "@/components/AnalogWatch";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -85,13 +85,9 @@ function Index() {
 
           <div className="relative animate-fade-up" style={{ animationDelay: "0.2s" }}>
             <div className="absolute inset-0 bg-gradient-emerald rounded-full blur-3xl opacity-40 animate-glow-pulse" />
-            <img
-              src={watchHero}
-              alt="Havrut Heritage Chronograph wristwatch with emerald dial and rose gold accents"
-              width={1024}
-              height={1024}
-              className="relative w-full h-auto animate-float drop-shadow-2xl"
-            />
+            <div className="relative">
+              <AnalogWatch />
+            </div>
             <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 w-3/4 h-8 bg-black/60 blur-2xl rounded-full" />
           </div>
         </div>
