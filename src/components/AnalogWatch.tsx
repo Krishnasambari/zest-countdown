@@ -133,22 +133,22 @@ export function AnalogWatch() {
           );
         })}
 
-        {/* Numerals */}
+        {/* Numerals — all on the same radius for a uniform ring */}
         {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n, i) => {
           const a = (i * 30 * Math.PI) / 180;
-          const isEdge = [3, 6, 9].includes(n);
-          const radius = isEdge ? 156 : 130;
+          const radius = 138;
           const x = 200 + Math.sin(a) * radius;
-          const y = 200 - Math.cos(a) * radius + (isEdge ? 4 : 6);
+          const y = 200 - Math.cos(a) * radius + 6;
           return (
             <text
               key={n}
               x={x}
               y={y}
               textAnchor="middle"
+              dominantBaseline="middle"
               fill="#e7c684"
               fontFamily="Georgia, serif"
-              fontSize={isEdge ? "13" : "18"}
+              fontSize="16"
               fontStyle="italic"
             >
               {n}
