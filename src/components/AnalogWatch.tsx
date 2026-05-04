@@ -14,7 +14,6 @@ export function AnalogWatch() {
   const [now, setNow] = useState(() => new Date());
   const [chronoMs, setChronoMs] = useState(0);
   const [running, setRunning] = useState(false);
-  const startRef = useRef<number | null>(null);
   const baseRef = useRef(0);
   const rafRef = useRef<number | null>(null);
 
