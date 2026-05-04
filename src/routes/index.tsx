@@ -1,7 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Countdown } from "@/components/Countdown";
 import { LiveClock } from "@/components/LiveClock";
 import { AnalogWatch } from "@/components/AnalogWatch";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/")({
   head: () => ({
