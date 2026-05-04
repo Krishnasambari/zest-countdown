@@ -32,16 +32,17 @@ export function AnalogWatch() {
   // Chronograph loop
   useEffect(() => {
     if (!running) return;
+    const startedAt = performance.now();
+    const startBase = baseRef.current;
     const tick = () => {
-      const elapsed = baseRef.current + (performance.now() - (startRef.current ?? 0));
+      const elapsed = startBase + (performance.now() - startedAt);
       setChronoMs(elapsed);
       rafRef.current = requestAnimationFrame(tick);
     };
-    startRef.current = performance.now();
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
-      baseRef.current = baseRef.current + (performance.now() - (startRef.current ?? 0));
+      baseRef.current = startBase + (performance.now() - startedAt);
     };
   }, [running]);
 
