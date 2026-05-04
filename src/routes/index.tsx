@@ -162,6 +162,76 @@ function Index() {
       <footer className="relative z-10 border-t border-gold/10 py-8 text-center text-xs uppercase tracking-[0.25em] text-muted-foreground">
         © 2026 Havrut Maison · Geneva, Switzerland
       </footer>
+
+      <Dialog open={reserveOpen} onOpenChange={setReserveOpen}>
+        <DialogContent className="sm:max-w-md border-gold/30 bg-card/95 backdrop-blur-xl">
+          <DialogHeader>
+            <DialogTitle className="font-display text-2xl">
+              Reserve your <span className="text-gradient-gold italic">Havrut</span>
+            </DialogTitle>
+            <DialogDescription>
+              Limited to 500 pieces. Complete the form to secure priority access.
+            </DialogDescription>
+          </DialogHeader>
+
+          {submitted ? (
+            <div className="py-8 text-center space-y-2">
+              <div className="text-3xl">✦</div>
+              <div className="font-display text-xl text-gradient-gold">Reservation received</div>
+              <p className="text-sm text-muted-foreground">
+                We'll be in touch before launch on June 15.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleReserveSubmit} className="space-y-4 pt-2">
+              <div className="grid grid-cols-2 gap-3">
+                <input
+                  required
+                  placeholder="First name"
+                  className="rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
+                />
+                <input
+                  required
+                  placeholder="Last name"
+                  className="rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
+                />
+              </div>
+              <input
+                required
+                type="email"
+                placeholder="Email address"
+                className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
+              />
+              <input
+                type="tel"
+                placeholder="Phone (optional)"
+                className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
+              />
+              <select
+                required
+                defaultValue=""
+                className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm focus:outline-none focus:border-gold transition"
+              >
+                <option value="" disabled>Preferred finish</option>
+                <option value="rose-gold">Rose Gold · Emerald Dial</option>
+                <option value="yellow-gold">Yellow Gold · Onyx Dial</option>
+                <option value="platinum">Platinum · Sapphire Dial</option>
+              </select>
+              <textarea
+                rows={3}
+                placeholder="Notes (optional)"
+                className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition resize-none"
+              />
+              <button
+                type="submit"
+                className="w-full rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.01] transition-transform"
+              >
+                Confirm reservation
+              </button>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
