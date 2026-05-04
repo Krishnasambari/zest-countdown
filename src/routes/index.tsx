@@ -27,6 +27,18 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const [reserveOpen, setReserveOpen] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleReserveSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSubmitted(true);
+    setTimeout(() => {
+      setReserveOpen(false);
+      setSubmitted(false);
+    }, 1800);
+  };
+
   return (
     <div className="min-h-screen relative overflow-hidden">
       {/* Decorative glow */}
