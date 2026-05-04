@@ -136,10 +136,11 @@ export function AnalogWatch() {
 
         {/* Numerals */}
         {[12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((n, i) => {
-          if ([3, 6, 9].includes(n)) return null; // sub-dials live here
           const a = (i * 30 * Math.PI) / 180;
-          const x = 200 + Math.sin(a) * 130;
-          const y = 200 - Math.cos(a) * 130 + 6;
+          const isEdge = [3, 6, 9].includes(n);
+          const radius = isEdge ? 156 : 130;
+          const x = 200 + Math.sin(a) * radius;
+          const y = 200 - Math.cos(a) * radius + (isEdge ? 4 : 6);
           return (
             <text
               key={n}
@@ -148,7 +149,7 @@ export function AnalogWatch() {
               textAnchor="middle"
               fill="#e7c684"
               fontFamily="Georgia, serif"
-              fontSize="18"
+              fontSize={isEdge ? "13" : "18"}
               fontStyle="italic"
             >
               {n}
