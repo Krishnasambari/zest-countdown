@@ -9,8 +9,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogDescription,
-  DialogTrigger,
 } from "@/components/ui/dialog";
+
+const WEB3FORMS_KEY = "02da42ac-9fa0-4ffc-a6e8-f7e9c4c97b20";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -28,24 +29,64 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const [reserveOpen, setReserveOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [reserveStatus, setReserveStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [waitlistStatus, setWaitlistStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
 
-  const handleReserveSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleReserveSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setReserveOpen(false);
-      setSubmitted(false);
-    }, 1800);
+    setReserveStatus("sending");
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", WEB3FORMS_KEY);
+    formData.append("subject", "New Havrut Watch Reservation");
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        setReserveStatus("success");
+        setTimeout(() => {
+          setReserveOpen(false);
+          setReserveStatus("idle");
+        }, 2000);
+      } else {
+        setReserveStatus("error");
+      }
+    } catch {
+      setReserveStatus("error");
+    }
+  };
+
+  const handleWaitlistSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setWaitlistStatus("sending");
+    const formData = new FormData(e.currentTarget);
+    formData.append("access_key", WEB3FORMS_KEY);
+    formData.append("subject", "New Havrut Waitlist Signup");
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      if (data.success) {
+        setWaitlistStatus("success");
+        (e.target as HTMLFormElement).reset();
+        setTimeout(() => setWaitlistStatus("idle"), 4000);
+      } else {
+        setWaitlistStatus("error");
+      }
+    } catch {
+      setWaitlistStatus("error");
+    }
   };
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* Decorative glow */}
       <div className="pointer-events-none absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-emerald/20 blur-[120px]" />
       <div className="pointer-events-none absolute top-1/2 -left-40 w-[500px] h-[500px] rounded-full bg-gold/10 blur-[120px]" />
 
-      {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-6 sm:px-12 py-6">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-full bg-gradient-gold shadow-gold flex items-center justify-center">
@@ -61,7 +102,6 @@ function Index() {
         <LiveClock />
       </header>
 
-      {/* Hero */}
       <main className="relative z-10 px-6 sm:px-12 pt-8 pb-24">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center max-w-7xl mx-auto">
           <div className="space-y-8 animate-fade-up">
@@ -114,7 +154,6 @@ function Index() {
           </div>
         </div>
 
-        {/* Specs strip */}
         <section
           id="craft"
           className="mt-32 max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px bg-gold/10 rounded-2xl overflow-hidden border border-gold/20"
@@ -127,14 +166,11 @@ function Index() {
           ].map(([v, l]) => (
             <div key={l} className="bg-card/60 backdrop-blur-md p-8 text-center">
               <div className="font-display text-4xl text-gradient-gold">{v}</div>
-              <div className="mt-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                {l}
-              </div>
+              <div className="mt-2 text-xs uppercase tracking-[0.2em] text-muted-foreground">{l}</div>
             </div>
           ))}
         </section>
 
-        {/* Reserve */}
         <section id="reserve" className="mt-32 max-w-2xl mx-auto text-center space-y-6">
           <h2 className="text-4xl sm:text-5xl font-bold">
             Be among the <span className="text-gradient-gold italic">first</span>.
@@ -142,20 +178,42 @@ function Index() {
           <p className="text-muted-foreground">
             Reservations open with the launch. Join the waitlist to receive priority access.
           </p>
-          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-4">
-            <input
-              type="email"
-              required
-              placeholder="your@email.com"
-              className="flex-1 rounded-full bg-card/60 border border-gold/30 px-6 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
-            />
-            <button
-              type="submit"
-              className="rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.02] transition-transform"
+
+          {waitlistStatus === "success" ? (
+            <div className="py-6 space-y-2">
+              <div className="text-3xl">✦</div>
+              <div className="font-display text-xl text-gradient-gold">You're on the list</div>
+              <p className="text-sm text-muted-foreground">
+                We'll notify you before June 15 launch.
+              </p>
+            </div>
+          ) : (
+            <form
+              onSubmit={handleWaitlistSubmit}
+              className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto pt-4"
             >
-              Notify me
-            </button>
-          </form>
+              <input type="checkbox" name="botcheck" className="hidden" />
+              <input
+                type="email"
+                name="email"
+                required
+                placeholder="your@email.com"
+                className="flex-1 rounded-full bg-card/60 border border-gold/30 px-6 py-3 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
+              />
+              <button
+                type="submit"
+                disabled={waitlistStatus === "sending"}
+                className="rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.02] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {waitlistStatus === "sending" ? "Sending..." : "Notify me"}
+              </button>
+              {waitlistStatus === "error" && (
+                <p className="text-xs text-red-400 w-full text-center mt-1">
+                  Something went wrong. Please try again.
+                </p>
+              )}
+            </form>
+          )}
         </section>
       </main>
 
@@ -174,7 +232,7 @@ function Index() {
             </DialogDescription>
           </DialogHeader>
 
-          {submitted ? (
+          {reserveStatus === "success" ? (
             <div className="py-8 text-center space-y-2">
               <div className="text-3xl">✦</div>
               <div className="font-display text-xl text-gradient-gold">Reservation received</div>
@@ -184,14 +242,17 @@ function Index() {
             </div>
           ) : (
             <form onSubmit={handleReserveSubmit} className="space-y-4 pt-2">
+              <input type="checkbox" name="botcheck" className="hidden" />
               <div className="grid grid-cols-2 gap-3">
                 <input
                   required
+                  name="firstname"
                   placeholder="First name"
                   className="rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                 />
                 <input
                   required
+                  name="lastname"
                   placeholder="Last name"
                   className="rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
                 />
@@ -199,16 +260,19 @@ function Index() {
               <input
                 required
                 type="email"
+                name="email"
                 placeholder="Email address"
                 className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
               />
               <input
                 type="tel"
+                name="phone"
                 placeholder="Phone (optional)"
                 className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition"
               />
               <select
                 required
+                name="finish"
                 defaultValue=""
                 className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm focus:outline-none focus:border-gold transition"
               >
@@ -219,14 +283,21 @@ function Index() {
               </select>
               <textarea
                 rows={3}
+                name="notes"
                 placeholder="Notes (optional)"
                 className="w-full rounded-md bg-background/60 border border-gold/30 px-4 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:border-gold transition resize-none"
               />
+              {reserveStatus === "error" && (
+                <p className="text-xs text-red-400 text-center">
+                  Something went wrong. Please try again.
+                </p>
+              )}
               <button
                 type="submit"
-                className="w-full rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.01] transition-transform"
+                disabled={reserveStatus === "sending"}
+                className="w-full rounded-full bg-gradient-gold px-6 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-background shadow-gold hover:scale-[1.01] transition-transform disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                Confirm reservation
+                {reserveStatus === "sending" ? "Sending..." : "Confirm reservation"}
               </button>
             </form>
           )}
